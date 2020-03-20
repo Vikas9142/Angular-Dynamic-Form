@@ -1,0 +1,36 @@
+<p>
+	parent works!
+</p>
+
+
+<form [formGroup] = myForm>
+
+	Name : <input type = "text" formControlName = 'name' />
+	<br/><br/>
+
+  Email : <input type = "email" formControlName = 'email' />
+
+	
+		<ng-container *ngFor = "let item of myForm.get('address').controls">
+      <div  [formGroup] = "item">
+      <br/><br/>
+			City : <input type = "text" formControlName = 'city' />
+			<br/><br/>
+      State : <input type = "text" formControlName = 'state' />
+			<br/><br/>
+      Country: <input type = "text" formControlName = 'country' />
+      <br/><br/>
+      <button (click) ="removeNode(i)">Remove</button>
+      	</div>
+    </ng-container>
+
+
+
+	<br/><br/>
+
+	<button (click)="addAddress()"> + Add More</button>
+
+</form>
+<br/><br/>
+
+  {{myForm.value | json}}
