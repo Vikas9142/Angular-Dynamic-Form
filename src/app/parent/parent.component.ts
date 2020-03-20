@@ -19,6 +19,7 @@ export class ParentComponent implements OnInit {
   messagefromparent = "Message sent and received from Parent To Child";
   messageReceivedByParent;
   dataMessage;
+  apiData : any;
   constructor(private dataService: DataService, private fb: FormBuilder) {
     this.dataService.sharedMessage.subscribe(res => {
       this.dataMessage = res;
@@ -44,7 +45,7 @@ export class ParentComponent implements OnInit {
     this.person.patchValue({ personEmail: "vikas.amu@gmail.com" });
 
     this.myForm = this.fb.group({
-      name: ["", [Validators.required]],
+      name: ["Urvashi", [Validators.required]],
       email: ["", []],
       address: this.fb.array([
         this.fb.group({
@@ -66,10 +67,11 @@ export class ParentComponent implements OnInit {
 
   callAPI() {
     this.dataService.getAPIMethod().subscribe(res => {
-      this.ApiData = res;
-      this.ApiData = this.ApiData.filter(
-        (element, index, inputArr) => element.userId === 5
-      );
+      if (res) {
+        this.apiData = res.filter(
+          (element, index, inputArr) => element.userId === 5
+        );
+      }
     });
   }
 

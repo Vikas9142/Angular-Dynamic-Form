@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+}) 
 export class DataService {
-private sharedMessage : any = new BehaviorSubject<string>('Default Message');
+ sharedMessage : any = new BehaviorSubject<string>('Default Message');
 
   constructor(private http : HttpClient) { }
 
@@ -12,7 +14,7 @@ private sharedMessage : any = new BehaviorSubject<string>('Default Message');
     this.sharedMessage.next(message);
   }
 
-  getAPIMethod() {
+  getAPIMethod = function() {
     return this.http.get('https://jsonplaceholder.typicode.com/posts');
   }
 

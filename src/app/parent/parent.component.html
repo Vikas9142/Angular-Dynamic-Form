@@ -13,7 +13,7 @@ Message from Data Service : {{dataMessage}}
 <button (click) = "updateInfo(inputInfo)">Click</button>
 {{inputInfo.value}} -->
 
-<div *ngFor = "let item of ApiData"> 
+<div *ngFor = "let item of apiData"> 
 {{item.userId}}
   </div>
 
@@ -81,5 +81,6 @@ Message from Data Service : {{dataMessage}}
 
    
 <app-child [messageReceivedByChild] = "messagefromparent" (messageEvent) = "receiveMessage($event)">
-  This message is between Selector of Child<br/>
+  This message is between Selector of Child
+  <br/>
 </app-child>
