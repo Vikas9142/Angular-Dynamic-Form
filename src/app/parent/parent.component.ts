@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
+import { DataService } from "../data.service";
 import {
-  FormBuilder,
   FormGroup,
   FormControl,
   Validators,
+  FormBuilder,
   FormArray
 } from "@angular/forms";
 
@@ -13,27 +14,77 @@ import {
   styleUrls: ["./parent.component.css"]
 })
 export class ParentComponent implements OnInit {
+  person: FormGroup;
   myForm: FormGroup;
-  constructor(private fb: FormBuilder) {}
-
-  ngOnInit() {
-    this.myForm = this.fb.group({
-      name: ["", [Validators.required]],
-      email: ["", []],
-      // address: this.fb.array([
-      //   this.fb.group({
-      //     city: ["", []],
-      //     state: ["", []],
-      //     country: ["", []]
-      //   })
-      // ])
-      address : this.fb.array([])
+  messagefromparent = "Message sent and received from Parent To Child";
+  messageReceivedByParent;
+  dataMessage;
+  constructor(private dataService: DataService, private fb: FormBuilder) {
+    this.dataService.sharedMessage.subscribe(res => {
+      this.dataMessage = res;
     });
   }
 
-get retAddress() {
-  return this.myForm.get('address') as FormArray;
-}
+  ngOnInit() {
+    //this.dataService.sharedMessage.next("Message Data Service")
+    this.dataService.changeMessage("Hello from Siblings");
+    localStorage.setItem("user", "Vikas");
+    // this.person = new FormGroup({
+    //   personName : new FormControl('Todd Moto', [Validators.required, Validators.minLength(2)]),
+    //   personPassword : new FormControl( '123', [Validators.required, Validators.minLength(2)]),
+    //   personEmail : new FormControl('')
+    // })
+
+    this.person = this.fb.group({
+      personName: ["Todd Moto", [Validators.required, Validators.minLength(2)]],
+      personPassword: ["123", [Validators.required, Validators.minLength(2)]],
+      personEmail: [""]
+    });
+
+    this.person.patchValue({ personEmail: "vikas.amu@gmail.com" });
+
+    this.myForm = this.fb.group({
+      name: ["", [Validators.required]],
+      email: ["", []],
+      address: this.fb.array([
+        this.fb.group({
+          city: ["", []],
+          state: ["", []],
+          country: ["", []]
+        })
+      ])
+    });
+  }
+
+  updateInfo(m) {
+    console.log(m);
+  }
+
+  receiveMessage(e) {
+    this.messageReceivedByParent = e;
+  }
+
+  callAPI() {
+    this.dataService.getAPIMethod().subscribe(res => {
+      this.ApiData = res;
+      this.ApiData = this.ApiData.filter(
+        (element, index, inputArr) => element.userId === 5
+      );
+    });
+  }
+
+  submitForm(personDetail) {
+    console.log(personDetail);
+  }
+
+  reactiveForm(person) {
+    console.log(person);
+  }
+
+  //   get retAddress() {
+  //   return this.myForm.get('address') as FormArray;
+  // }
+
   addAddress() {
     // this.myForm.get("address").push(
     //   this.fb.group({
@@ -42,18 +93,17 @@ get retAddress() {
     //     country: ["", []]
     //   })
     // );
-
-    console.log(this.myForm);
-    const addressGroup = this.fb.group ({
-      city : ['',[]],
-      state : ['',[]],
-      country : ['',[]]
-    })
-    this.retAddress.push(addressGroup);
+    let usersArray = this.myForm.controls.address as FormArray;
+    let addressGroup = this.fb.group({
+      city: ["", []],
+      state: ["", []],
+      country: ["", []]
+    });
+    usersArray.push(addressGroup);
   }
 
   removeNode(param) {
-   this.retAddress.removeAt(param);
-  
+    let usersArray = this.myForm.controls.address as FormArray;
+    usersArray.removeAt(param);
   }
 }

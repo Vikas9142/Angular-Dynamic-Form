@@ -1,8 +1,54 @@
+
+
 <p>
-	parent works!
+parent works!<br/>
+Communication from Child From Parent:<br/>
+{{messageReceivedByParent}}
+<br/> 
+Message from Data Service : {{dataMessage}}
 </p>
 
+<button (click) = "callAPI()"> Click Me </button>
+<!-- <input type = "text" #inputInfo  name ="Vikas">
+<button (click) = "updateInfo(inputInfo)">Click</button>
+{{inputInfo.value}} -->
 
+<div *ngFor = "let item of ApiData"> 
+{{item.userId}}
+  </div>
+
+  <br/><h1>Template Driven Form</h1><br/>
+
+  <form #personForm = "ngForm" (ngSubmit) = "submitForm(personForm)">
+    Name : <input type = "text" name = 'personName' maxlength="50" placeholder = "Name" [(ngModel)] = "personName" #personname = "ngModel" required/><br/>
+   
+    Age : <input type = "number" name = "personAge" maxlength="50" placeholder = "Age" [(ngModel)] = "personAge" #personage = "ngModel" required/><br/>
+    
+    Password : <input type ="password" name = "personPassword" maxlength="50" placeholder = "Password" [(ngModel)] = "personPassword" required #personpassword = "ngModel"/><br/>
+   
+    Email : <input type = "email" name = "personEmail" maxlength = "50" placeholder = "Email" [(ngModel)] = "personEmail" #personemail = "ngModel" required />
+    <!-- <span *ngIf = "personemail.inval">Required</span> -->
+     <br/><br/>
+    <button  type="submit"> Submit </button>
+  </form>
+  <br/>
+ From Value {{personForm.value | json}}
+
+
+ <br/><h1>Reactive Form</h1><br/>
+
+ <form [formGroup] = "person" (ngSubmit) = "reactiveForm(person)">
+   <br/>Name : <input type = "text" formControlName = 'personName' /><br/>
+   <br/>Password : <input type  = "password" formControlName = 'personPassword' /><br/>
+   <br/>Email: <input type = 'email' formControlName = 'personEmail' />
+   
+   <br/><br/>
+     <button  type="submit"> Submit </button>
+ </form>
+
+
+<br/><br/>
+<h2>Dynamic Reactive Form</h2>
 <form [formGroup] = myForm>
 
 	Name : <input type = "text" formControlName = 'name' />
@@ -24,8 +70,6 @@
       	</div>
     </ng-container>
 
-
-
 	<br/><br/>
 
 	<button (click)="addAddress()"> + Add More</button>
@@ -33,4 +77,9 @@
 </form>
 <br/><br/>
 
-  {{myForm.value | json}}
+ Form Value {{myForm.value | json}}
+
+   
+<app-child [messageReceivedByChild] = "messagefromparent" (messageEvent) = "receiveMessage($event)">
+  This message is between Selector of Child<br/>
+</app-child>
